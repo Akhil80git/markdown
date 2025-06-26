@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Markdown Previewer</title>
+  <style>
+    :root {
+      --primary-color: #254E70;
+      --secondary-color: #37718E;
+      --accent-color: #8EE3EF;
+      --light-color: #AEF3E7;
+      --dark-color: #1A2C38;
+      --text-color: #2F2F2F;
+      --text-light: #FFFFFF;
+      --code-bg: #f0f0f0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-color);
+      margin: 0;
+      padding: 20px;
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .box {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .box:hover {
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+    
+    .box-header {
+      background-color: var(--primary-color);
+      color: var(--text-light);
+      font-weight: bold;
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .box-header i {
+      margin-right: 10px;
+    }
+    
+    #editor {
+      width: 100%;
+      min-height: 200px;
+      border: none;
+      padding: 20px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      resize: vertical;
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #eee;
+    }
+    
+    #editor:focus {
+      outline: none;
+      background-color: white;
+    }
+    
+    #preview {
+      padding: 25px;
+      min-height: 200px;
+    }
+    
+    /* Markdown styling */
+    #preview h1 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+      margin-top: 0;
+      text-align: left;
+    }
+    
+    #preview h2 {
+      color: var(--secondary-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+    
+    #preview h3 {
+      color: var(--secondary-color);
+    }
+    
+    #preview code {
+      background-color: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+    
+    #preview pre {
+      background-color: var(--code-bg);
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      line-height: 1.4;
+    }
+    
+    #preview blockquote {
+      border-left: 4px solid var(--accent-color);
+      padding-left: 15px;
+      margin-left: 0;
+      color: #555;
+    }
+    
+    #preview table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 15px 0;
+    }
+    
+    #preview table th, #preview table td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+    }
+    
+    #preview table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    #preview table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    
+    #preview img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: var(--secondary-color);
+      font-size: 0.9rem;
+    }
+    
+    @media (min-width: 768px) {
+      .container {
+        flex-direction: row;
+      }
+      
+      .box {
+        flex: 1;
+        min-height: 500px;
+      }
+      
+      #editor {
+        min-height: 400px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <h1>Markdown Previewer</h1>
+  
+  <div class="container">
+    <div class="box">
+      <div class="box-header">
+        <i class="fas fa-edit"></i> Editor
+      </div>
+      <textarea id="editor" oninput="updatePreview()">
+# Welcome to my React Markdown Previewer!
+
+## This is a sub-heading...
+### And here's some other cool stuff:
+
+Heres some code, `<div></div>`, between 2 backticks.
+
+```
+// this is multi-line code:
+
+function anotherExample(firstLine, lastLine) {
+  if (firstLine == '```' && lastLine == '```') {
+    return multiLineCode;
+  }
+}
+```
+
+You can also make text **bold**... whoa!
+Or _italic_.
+Or... wait for it... **_both!_**
+And feel free to go crazy ~~crossing stuff out~~.
+
+There's also [links](https://www.freecodecamp.org), and
+> Block Quotes!
+
+And if you want to get really crazy, even tables:
+
+Wild Header | Crazy Header | Another Header?
+------------ | ------------- | -------------
+Your content can | be here, and it | can be here....
+And here. | Okay. | I think we get it.
+
+- And of course there are lists.
+  - Some are bulleted.
+     - With different indentation levels.
+        - That look like this.
+
+
+1. And there are numbered lists too.
+1. Use just 1s if you want!
+1. And last but not least, let's not forget embedded images:
+
+![freeCodeCamp Logo](https://cdn.freecodecamp.org/testable-projects-fcc/images/fcc_secondary.svg)
+
+</textarea>
+    </div>
+    
+    <div class="box">
+  <div class="box-header">
+    <i class="fas fa-eye"></i> Preview
+  </div>
+  <div id="preview"></div>
+</div>
+</div> <div class="footer"> Made with ❤️ using Marked.js </div> <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <script> function updatePreview() { const input = document.getElementById('editor').value; document.getElementById('preview').innerHTML = marked.parse(input); } // Initialize with default content updatePreview(); // Add syntax highlighting (optional) marked.setOptions({ highlight: function(code, lang) { if (lang && hljs.getLanguage(lang)) { return hljs.highlight(lang, code).value; } return hljs.highlightAuto(code).value; } }); </script>
+
+
+</div>
+<div class="footer">Made with ❤️ using Marked.js</div>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<!-- Your script -->
+<script>
+  // ... above script code ...
+    function updatePreview() {
+    const input = document.getElementById('editor').value;
+    document.getElementById('preview').innerHTML = marked.parse(input);
+  }
+  
+  // Initialize with default content
+  updatePreview();
+  
+  // Optional: Add syntax highlighting
+  marked.setOptions({
+    highlight: function(code, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        return hljs.highlight(lang, code).value;
+      }
+      return hljs.highlightAuto(code).value;
+    }
+  });
+</script>
+</body>
+</html>
+
+</body> </html>
